@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CategoryController extends AbstractController
 {
-    #[Route('admin/category', name: 'app_category')]
+    #[Route('category', name: 'app_category')]
     public function index(CategoryRepository $categoryRepository): Response
     {
         return $this->render('category/index.html.twig', [
@@ -22,7 +22,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/category/create', name: 'app_create')]
+    #[Route('admin/category/create', name: 'app_create')]
     public function create(Request $request, EntityManagerInterface $manager): Response
     {
         $category = new Category();
@@ -43,8 +43,4 @@ class CategoryController extends AbstractController
             'form'=> $form->createView()
         ]);
     }
-
-
-
-
 }
