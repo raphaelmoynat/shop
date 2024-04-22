@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+
+    {% for category in categories %}
+        <div class="border border-dark">
+            {{ category.name }}
+        </div>
+
+    {% endfor %}
+{% endblock %}
