@@ -54,14 +54,13 @@ class ProductController extends AbstractController
         return $this->render('product/create.html.twig', [
             "product"=>$product,
             "form"=>$form->createView(),
-            "btnValue"=>"Editer"
+            "btnValue"=>"Créer"
         ]);
     }
 
     #[Route('/product/show/{id}', name: 'app_show')]
     public function show(Product $product): Response
     {
-
 
         return $this->render('product/show.html.twig', [
             "product"=>$product,
@@ -77,7 +76,7 @@ class ProductController extends AbstractController
             return $this->redirectToRoute("app_product");
     }
 
-    #[Route('/product/edit/{id}', name: 'app_edit_product')]
+    #[Route('/admin/product/edit/{id}', name: 'app_edit_product')]
     public function edit(Request $request, EntityManagerInterface $manager, Product $product):Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -97,7 +96,7 @@ class ProductController extends AbstractController
 
     }
 
-    #[Route('/product/images/{id}', name:"product_image")]
+    #[Route('/admin/product/images/{id}', name:"product_image")]
     public function addImage(Product $product):Response
     {
 
