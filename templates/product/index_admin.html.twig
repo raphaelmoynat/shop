@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Show</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products|reverse %}
+            <tr>
+                <th scope="row">{{ product.id }}</th>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }} €</td>
+                <td>
+                    <a href="{{ path("app_show_admin", {id:product.id}) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path("app_cart_add_admin", {id:product.id, quantity:1}) }}" class="btn btn-primary">Add to cart</a>
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+
+
+
+
+
+{% endblock %}

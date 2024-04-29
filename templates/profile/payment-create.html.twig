@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    {{ form_start(form) }}
+
+    <div class="mb-3">
+        {{ form_row(form.cardNumber)}}
+    </div>
+
+    <button type="submit" class="btn btn-success">{{ btnValue }}</button>
+
+    {{ form_end(form) }}
+{% endblock %}

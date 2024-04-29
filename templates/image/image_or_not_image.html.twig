@@ -11,7 +11,6 @@
                     <div class="carousel-item {% if loop.first %}active{% endif %}">
                         <div class="position-relative">
                             <img class="d-block w-100 img-fluid rounded-3" style="height: 300px; object-fit: cover;" src="{{ vich_uploader_asset(image) }}" alt="">
-                            <a href="{{ path("delete_product_image", {id: image.id}) }}" class="btn btn-danger btn-sm position-absolute z-3 top-0 start-0 m-2">Supprimer</a>
                         </div>
                     </div>
                 {% endfor %}

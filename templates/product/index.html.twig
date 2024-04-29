@@ -25,6 +25,7 @@
                             <div>Ajouté le {{ product.createdAt|date("d/m/Y H:i") }}</div>
                         </small>
                         <div class="d-flex justify-content-center align-items-center">
+                            <a href="{{ path("app_cart_add", {id:product.id, quantity: 1}) }}" class="btn btn-primary">Add to cart</a>
                             <a href="{{ path("app_show", {id: product.id}) }}" class="btn btn-primary mt-3">Voir</a>
                         </div>
                     </div>
