@@ -4,28 +4,62 @@
 
 {% block body %}
     {% if app.user %}
-        <div class="d-flex flex-column justify-content-center align-items-center">
-            <div class="d-flex my-4 "><h3>Profil de {{ app.user.email }}</h3></div>
-            <div class="d-flex align-items-center justify-content-center">
-                <strong class="me-3">Your payment methods :</strong>
-                <div class="d-flex flex-column me-3">
-                    {% for paymentMethod in app.user.paymentMethods %}
-                        <div>{{ paymentMethod.cardNumber }} <a href="{{ path("app_edit_paymentmethod", {id:paymentMethod.id}) }}" class="btn btn-warning" >E</a> <a href="{{ path("app_delete_paymentmethod", {id:paymentMethod.id}) }}" class="btn btn-danger" >X</a></div>
-                    {% endfor %}
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h3 class="text-center mb-4">Profil de {{ app.user.email }}</h3>
+
+                    <div class="card mb-4 col-8 mx-auto">
+                        <div class="card-header">
+                            <h5 class="card-title">Vos moyens de paiement :</h5>
+                        </div>
+                        <div class="card-body">
+
+                                <table class="table table-striped">
+                                    <tbody>
+                                    {% for paymentMethod in app.user.paymentMethods %}
+                                        <tr>
+                                            <td>{{ paymentMethod.cardNumber }}</td>
+                                            <td class="col-4">
+                                                <a href="{{ path("app_edit_paymentmethod", {id:paymentMethod.id}) }}" class="btn btn-warning me-4"><i class="bi bi-pencil"></i></a>
+                                                <a href="{{ path("app_delete_paymentmethod", {id:paymentMethod.id}) }}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            <a href="{{ path("app_create_paymentmethod") }}" class="btn btn-primary text-center">Ajouter <i class="bi bi-credit-card"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="card col-8 mx-auto">
+                        <div class="card-header">
+                            <h5 class="card-title">Vos adresses :</h5>
+                        </div>
+                        <div class="card-body">
+
+                                <table class="table table-striped">
+                                    <tbody>
+                                    {% for address in app.user.addresses %}
+                                        <tr>
+                                            <td>{{ address.streetNumber }} rue {{ address.street }}, {{ address.zipcode }} {{ address.city }}, {{ address.country }}</td>
+                                            <td class="col-4">
+                                                <a href="{{ path("app_edit_address", {id:address.id}) }}" class="btn btn-warning me-4"><i class="bi bi-pencil"></i></a>
+                                                <a href="{{ path("app_delete_address", {id:address.id}) }}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            <a href="{{ path('app_address_create') }}" class="btn btn-primary">Ajouter <i class="bi bi-house-add"></i></a>
+                        </div>
+                    </div>
+
                 </div>
-                <a class="ms-3 btn btn-warning" href="{{ path("app_create_paymentmethod") }}">Add</a>
-            </div>
-            <div class="d-flex align-items-center justify-content-center mt-4">
-                <strong class="me-3">Your addresses :</strong>
-                <div class="d-flex flex-column me-3">
-                    {% for address in app.user.addresses %}
-                        <div>{{ address.streetNumber }} rue {{ address.street }}</div>
-                        <div>{{ address.zipcode }} {{ address.city }}, {{ address.country }} <a href="{{ path("app_edit_address", {id:address.id}) }}" class="btn btn-warning" >E</a> <a href="{{ path("app_delete_address", {id:address.id}) }}" class="btn btn-danger" >X</a> </div>
-                    {% endfor %}
-                </div>
-                <a class="ms-3 btn btn-warning" href="{{ path('app_address_create') }}">Add</a>
             </div>
         </div>
-
     {% endif %}
 {% endblock %}
+

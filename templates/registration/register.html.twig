@@ -1,19 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% form_theme registrationForm "bootstrap_5_layout.html.twig" %}
+
+{% block title %}S'inscrire{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="card w-50 mx-auto mt-5">
+        <div class="card-body">
+            <h1 class="card-title text-center">Inscription</h1>
 
-    {{ form_errors(registrationForm) }}
+            {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+            {{ form_start(registrationForm) }}
+            <div class="mb-3">
+                {{ form_row(registrationForm.email) }}
+            </div>
+            <div class="mb-3">
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password'
+                }) }}
+            </div>
+            <div class="mb-3 form-check">
+                {{ form_row(registrationForm.agreeTerms) }}
+            </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+
+
+            <div class="d-flex mt-3 justify-content-center align-items-center">
+                <div class="mx-3">Vous avez un compte ?</div>
+                <a class="btn btn-secondary" href="{{ path("app_login") }}" >Connectez-vous</a>
+            </div>
+            {{ form_end(registrationForm) }}
+
+
+
+        </div>
+    </div>
 {% endblock %}

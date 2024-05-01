@@ -1,21 +1,32 @@
 {% extends 'base.html.twig' %}
 
-
-
 {% block body %}
-    {{ form_start(form) }}
+    <div class="container mt-5 d-flex justify-content-center">
+        <div class="card col-6">
+            <div class="card-header">
+                <h5 class="card-title">Formulaire d'ajout de produit</h5>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'class': 'mb-3'}}) }}
 
-    <div class="mb-3">
-        {{ form_row(form.name)}}
-    </div>
-    <div class="mb-3">
-        {{ form_row(form.description)}}
-    </div>
-    <div class="mb-3">
-        {{ form_row(form.price)}}
-    </div>
+                <div class="mb-3">
+                    {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.description, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.price, {'attr': {'class': 'form-control'}}) }}
+                </div>
 
-    <button type="submit" class="btn btn-success">{{ btnValue }}</button>
+                <div class="text-center">
 
-    {{ form_end(form) }}
+                    <button type="submit" class="btn btn-success">{{ btnValue }}</button>
+
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

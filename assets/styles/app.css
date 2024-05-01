@@ -1,3 +1,12 @@
 body {
     background-color: skyblue;
 }
+
+.bg-nav{
+    background-color: #0a53be;
+
+}
+
+.text-nav{
+    color: #ffe72c;
+}

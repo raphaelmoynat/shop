@@ -36,10 +36,6 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
 
             $product->setCreatedAt(new \DateTime());
-
-
-
-
             $manager->persist($product);
             $manager->flush();
 
@@ -47,12 +43,10 @@ class ProductController extends AbstractController
         }
 
 
-
-
         return $this->render('product/create.html.twig', [
             "product"=>$product,
             "form"=>$form->createView(),
-            "btnValue"=>"Créer"
+            "btnValue"=>"Ajouter"
         ]);
     }
 

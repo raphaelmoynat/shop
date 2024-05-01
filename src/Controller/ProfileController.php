@@ -60,7 +60,7 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/payment-create.html.twig', [
             "form"=>$form->createView(),
-            "btnValue"=>"Editer"
+            "btnValue"=>"Ajouter"
 
         ]);
     }
@@ -120,5 +120,6 @@ class ProfileController extends AbstractController
         ]);
 
     }
+
 
 }

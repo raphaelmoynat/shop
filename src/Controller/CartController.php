@@ -26,6 +26,9 @@ class CartController extends AbstractController
     #[Route('/addfromcart/{id}/{quantity}', name: 'app_cart_addfromcart')]
     public function addToCart(Request $request, Product $product, $quantity, CartService $cartService): Response
     {
+        if(!$this->getUser()){return $this->redirectToRoute("app_login");}
+
+
         $cartService->addProduct($product, $quantity);
 
         $originRoute = $request->attributes->get('_route');

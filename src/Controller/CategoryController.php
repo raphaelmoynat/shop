@@ -14,11 +14,24 @@ use Symfony\Component\Routing\Attribute\Route;
 class CategoryController extends AbstractController
 {
     #[Route('category', name: 'app_category')]
-    public function index(CategoryRepository $categoryRepository): Response
+    public function index(CategoryRepository $categoryRepository, Request $request, EntityManagerInterface $manager): Response
     {
+        $category = new Category();
+
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $manager->persist($category);
+            $manager->flush();
+
+            return $this->redirectToRoute("app_category");
+        }
+
         return $this->render('category/index.html.twig', [
             'controller_name' => 'CategoryController',
-            'categories'=> $categoryRepository->findAll()
+            'categories'=> $categoryRepository->findAll(),
+            'form'=> $form->createView()
         ]);
     }
 

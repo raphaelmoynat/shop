@@ -3,15 +3,16 @@
 
 
 {% block body %}
+        <h1 class="text-center mt-3">All products</h1>
 
-        <table class="table">
+        <table class="table mt-5">
             <thead>
             <tr>
                 <th scope="col">id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
-                <th scope="col">Show</th>
+                <th scope="col">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -21,9 +22,9 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.description }}</td>
                 <td>{{ product.price }} €</td>
-                <td>
+                <td class="col-2">
                     <a href="{{ path("app_show_admin", {id:product.id}) }}" class="btn btn-primary">Voir</a>
-                    <a href="{{ path("app_cart_add_admin", {id:product.id, quantity:1}) }}" class="btn btn-primary">Add to cart</a>
+                    <a href="{{ path("app_cart_add_admin", {id:product.id, quantity:1}) }}" class="btn btn-primary"><i class="bi bi-bag-plus"></i></a>
                 </td>
             </tr>
             {% endfor %}
