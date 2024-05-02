@@ -7,6 +7,7 @@ use App\Entity\Image;
 use App\Entity\Product;
 use App\Form\CommentType;
 use App\Form\ImageType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,12 +18,24 @@ use Symfony\Component\Routing\Attribute\Route;
 class UserController extends AbstractController
 {
     #[Route('/product', name: 'app_product', priority: 1)]
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request): Response
     {
+
+        $categoryId = $request->query->get('category');
+
+        if ($categoryId) {
+            $category = $categoryRepository->find($categoryId);
+            $products = $productRepository->findBy(['category' => $category]);
+        } else {
+            $products = $productRepository->findAll();
+        }
+
+        $categories = $categoryRepository->findAll();
 
         return $this->render('product/index.html.twig', [
             'controller_name' => 'ProductController',
-            "products"=>$productRepository->findAll()
+            'products' => $products,
+            'categories' => $categories
         ]);
     }
 

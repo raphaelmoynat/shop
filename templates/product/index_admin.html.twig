@@ -11,6 +11,7 @@
                 <th scope="col">id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
+                <th scope="col">Category</th>
                 <th scope="col">Price</th>
                 <th scope="col">Action</th>
             </tr>
@@ -21,6 +22,7 @@
                 <th scope="row">{{ product.id }}</th>
                 <td>{{ product.name }}</td>
                 <td>{{ product.description }}</td>
+                <td>{{ product.category.name }}</td>
                 <td>{{ product.price }} €</td>
                 <td class="col-2">
                     <a href="{{ path("app_show_admin", {id:product.id}) }}" class="btn btn-primary">Voir</a>

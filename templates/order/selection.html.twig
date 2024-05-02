@@ -11,7 +11,7 @@
                         <h5 class="card-title">Confirmation des informations de commande</h5>
                     </div>
                     <div class="card-body">
-                        {{ form_start(form, {attr:{action:path('app_order_create')}}) }}
+                        {{ form_start(form) }}
 
                         <div class="mb-3">
                             {{ form_row(form.billing, {'attr': {'class': 'form-control'}}) }}

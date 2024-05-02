@@ -56,4 +56,37 @@ class CategoryController extends AbstractController
             'form'=> $form->createView()
         ]);
     }
+
+    #[Route('/category/delete/{id}', name: 'delete_category')]
+    public function delete(Category $category, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($category);
+        $manager->flush();
+
+        return $this->redirectToRoute('app_category');
+
+
+    }
+
+    #[Route('/category/edit/{id}', name: 'edit_category')]
+    public function edit(Request $request, EntityManagerInterface $manager, Category $category):Response
+    {
+        $form = $this->createForm(CategoryType::class, $category);
+
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($category);
+            $manager->flush();
+
+            return $this->redirectToRoute("app_category");
+        }
+
+
+
+        return $this->render('category/edit.html.twig', [
+            "form"=>$form->createView(),
+        ]);
+
+    }
 }

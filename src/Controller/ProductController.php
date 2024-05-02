@@ -20,6 +20,10 @@ class ProductController extends AbstractController
     #[Route('/admin/product', name: 'app_product_admin')]
     public function index(ProductRepository $productRepository): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_product');
+        }
+
         return $this->render('product/index_admin.html.twig', [
             'controller_name' => 'ProductController',
             "products"=>$productRepository->findAll()
@@ -30,6 +34,10 @@ class ProductController extends AbstractController
     #[Route('/admin/create/product', name: 'app_create_product', priority: 2)]
     public function create(Request $request, EntityManagerInterface $manager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_product');
+        }
+
         $product = new Product;
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -53,6 +61,10 @@ class ProductController extends AbstractController
     #[Route('/admin/product/show/{id}', name: 'app_show_admin', methods: ['GET', 'POST'], priority: 2)]
     public function show(Product $product, Request $request, EntityManagerInterface $manager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_product');
+        }
+
         $image = new Image();
         $formImage = $this->createForm(ImageType::class, $image);
         $formImage->handleRequest($request);
@@ -77,14 +89,23 @@ class ProductController extends AbstractController
     #[Route('/admin/product/delete/{id}', name: 'app_delete_product', priority: 3)]
     public function delete(EntityManagerInterface $manager, Product $product):Response
     {
+
+        if (!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_product');
+        }
             $manager->remove($product);
             $manager->flush();
-            return $this->redirectToRoute("app_product");
+            return $this->redirectToRoute("app_product_admin");
     }
 
     #[Route('/admin/product/edit/{id}', name: 'app_edit_product', priority: 4)]
     public function edit(Request $request, EntityManagerInterface $manager, Product $product):Response
     {
+
+        if (!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_product');
+        }
+
         $form = $this->createForm(ProductType::class, $product);
 
         $form->handleRequest($request);
@@ -92,7 +113,7 @@ class ProductController extends AbstractController
             $product->setCreatedAt(new \DateTime());
             $manager->persist($product);
             $manager->flush();
-            return $this->redirectToRoute("app_show", ["id" => $product->getId()]);
+            return $this->redirectToRoute("app_show_admin", ["id" => $product->getId()]);
             }
 
         return $this->render('product/create.html.twig', [
@@ -105,6 +126,9 @@ class ProductController extends AbstractController
     #[Route('/admin/product/images/{id}', name:"product_image", priority: 5)]
     public function addImage(Product $product):Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_product');
+        }
             $image = new Image();
             $formImage = $this->createForm(ImageType::class, $image);
 
@@ -117,6 +141,11 @@ class ProductController extends AbstractController
     #[Route('/admin/delete/image/{id}', name: 'delete_product_image', priority: 6)]
     public function deleteImage(EntityManagerInterface $manager, Image $image)
     {
+
+        if (!$this->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_product');
+        }
+
         $product = $image->getProduct();
         $manager->remove($image);
         $manager->flush();

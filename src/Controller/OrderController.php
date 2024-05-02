@@ -47,38 +47,44 @@ class OrderController extends AbstractController
             ])
             ->setMethod('POST')
             ->getForm();
+
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+            if ($formData['billing']=== null || $formData['delivery']===null || $formData['payment']===null )
+            {
+                return $this->render('order/selection.html.twig', [
+                    'controller_name' => 'OrderController',
+                    'form' => $form->createView()
+                ]);
+
+            }else{
+
+                $order = new Order();
+                $order->setCustomer($this->getUser());
+                $order->setBillingAddress($formData['billing']);
+                $order->setDeliveryAddress($formData['delivery']);
+                $order->setPaymentMethod($formData['payment']);
+                $order->setStatus(0);
+                $order->setDeliveryStatus(0);
+
+                $entityManager->persist($order);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_recap_order', ['id' => $order->getId()]);
+
+            }
+
+        }
+
         return $this->render('order/selection.html.twig', [
             'controller_name' => 'OrderController',
             'form' => $form->createView()
         ]);
     }
 
-    #[Route('/create', name: 'app_order_create', methods: ['GET', 'POST'])]
-    public function create(Request $request,
-                           AddressRepository $addressRepository,
-                           PaymentMethodRepository $paymentMethodRepository,
-                           EntityManagerInterface $entityManager,
 
-    ):Response
-    {
-        $infos = $request->get('form');
-        $deliveryAddress = $addressRepository->find($infos['delivery']);
-        $billingAddress = $addressRepository->find($infos['billing']);
-        $paymentMethod = $paymentMethodRepository->find($infos['payment']);
-
-        $order = new Order();
-        $order->setCustomer($this->getUser());
-        $order->setBillingAddress($billingAddress);
-        $order->setDeliveryAddress($deliveryAddress);
-        $order->setPaymentMethod($paymentMethod);
-        $order->setStatus(0);
-        $order->setDeliveryStatus(0);
-        $entityManager->persist($order);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_recap_order', ['id' => $order->getId()]) ;
-
-    }
 
     #[Route('/recap/{id}', name: 'app_recap_order', methods: ['POST', 'GET'])]
     public function recapOrder($id,OrderRepository $orderRepository, CartService $cartService): Response
