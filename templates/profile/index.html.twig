@@ -57,6 +57,55 @@
                         </div>
                     </div>
 
+                    <div class="card my-4 col-12 mx-auto">
+                        <div class="card-header">
+                            <h5 class="card-title">Historique de commandes :</h5>
+                        </div>
+                        <div class="card-body">
+
+                            <table class="col-12">
+                                <thead>
+                                <tr>
+                                    <th class="">Quantité</th>
+                                    <th class="">Nom du Produit</th>
+                                    <th class="">Statut</th>
+                                    <th class="">Livraison</th>
+                                    <th class="">Action</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for order in app.user.orders %}
+                                    {% for orderItem in order.orderItems %}
+
+                                        <tr>
+                                            <td class="">{{ orderItem.quantity }}</td>
+                                            <td class="">{{ orderItem.product.name }}</td>
+                                    {% endfor %}
+                                            {% if order.status == 1 %}
+                                                <td class="text-success">Paiement effectué</td>
+                                            {% else %}
+                                                <td class="text-danger">Paiement en attente</td>
+                                            {% endif%}
+                                            {% if order.deliveryStatus == 2 %}
+                                                <td class="text-success">Livré</td>
+                                            {% elseif order.deliveryStatus == 1 %}
+                                                <td class="text-warning">En cours de livraison</td>
+                                            {% elseif order.deliveryStatus == 0 %}
+                                                <td class="text-danger">A l'entrepôt</td>
+                                            {% endif%}
+                                            <td class="">
+                                                <a href="{{ path("app_pdf_generator", {id:order.id}) }}" class="btn btn-danger">PDF</a>
+                                            </td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

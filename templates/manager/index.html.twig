@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    <h1 class="text-center mt-3">All orders</h1>
+
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th scope="col">Commande</th>
+            <th scope="col">Client</th>
+            <th scope="col">Status</th>
+            <th scope="col">Delivery Status</th>
+
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders|reverse %}
+            <tr>
+                <th scope="row">{{ order.id }}</th>
+                <td>{{ order.customer.email }}</td>
+                {% if order.status == 1 %}
+                    <td class="text-success">Paiement effectué</td>
+                {% else %}
+                    <td class="text-danger">Paiement en attente</td>
+                {% endif%}
+                {% if order.deliveryStatus == 2 %}
+                    <td class="text-success">Livré</td>
+                {% elseif order.deliveryStatus == 1 %}
+                    <td class="text-warning">En cours de livraison</td>
+                {% elseif order.deliveryStatus == 0 %}
+                    <td class="text-danger">A l'entrepôt</td>
+                {% endif%}
+                <td class="col-2">
+                    <a href="{{ path("app_manager_show", {id:order.id}) }}" class="btn btn-primary">Voir</a>
+
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Resume</title>
+</head>
+<body>
+<div style="margin: 0 auto;display: block;width: 500px;">
+    <h1 class="text-center">Récapitulatif de Livraison</h1>
+    <table style="line-height: 2rem;" border="1">
+        <tr>
+            <td>Customer : </td>
+            <td>{{customer.email}}</td>
+        </tr>
+        {% for item in products %}
+        <tr>
+            <td>Product : </td>
+            <td>{{item.product.name}}</td>
+        </tr>
+
+            <tr>
+                <td>Quantité : </td>
+                <td>{{item.quantity}}</td>
+
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>Delivery Address : </td>
+            <td>
+                {{ deliveryAddress.streetNumber }} rue {{ deliveryAddress.street }}, {{ deliveryAddress.zipcode }} {{ deliveryAddress.city }}, {{ deliveryAddress.country }}
+            </td>
+        </tr>
+        <tr>
+            <td>Billing Adress : </td>
+            <td>
+                {{ billingAddress.streetNumber }} rue {{ billingAddress.street }}, {{ billingAddress.zipcode }} {{ billingAddress.city }}, {{ billingAddress.country }}
+            </td>
+        </tr>
+        <tr>
+            <td>Total : </td>
+            <td>{{total}} €</td>
+        </tr>
+    </table>
+</div>
+</body>

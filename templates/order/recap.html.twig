@@ -18,7 +18,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for item in items %}
+                    {% for item in order.orderItems %}
                         <tr>
                             <td>{{ item.product.name }}</td>
                             <td>{{ item.product.price }}€</td>
@@ -30,7 +30,7 @@
                     <tfoot>
                     <tr>
                         <td colspan="3"><strong>Total:</strong></td>
-                        <td>{{ total }}€</td>
+                        <td>{{ order.total }}€</td>
                     </tr>
                     <tr>
                         <td colspan="3"><strong>Billing Address : </strong></td>
@@ -41,7 +41,7 @@
                     <tr>
                         <td colspan="3"><strong>Delivery Address : </strong></td>
                         <td>
-                            {{ order.deliveryAddress.streetNumber }} {{ order.deliveryAddress.street }}, {{ order.deliveryAddress.zipcode }} {{ order.deliveryAddress.city }}
+                            {{ order.deliveryAddress.streetNumber }} rue {{ order.deliveryAddress.street }}, {{ order.deliveryAddress.zipcode }} {{ order.deliveryAddress.city }}
                         </td>
                     </tr>
                     <tr>
@@ -55,7 +55,7 @@
                 </table>
                 <div class="text-center mt-4">
 
-                    <button type="submit" class="btn btn-success">Continuer vers la commande</button>
+                    <a href="{{ path("app_pay", {id:order.id}) }}" class="btn btn-success">Payer</a>
                 </div>
             </div>
         </div>

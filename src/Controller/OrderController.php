@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\OrderItem;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Repository\PaymentMethodRepository;
@@ -24,7 +25,9 @@ class OrderController extends AbstractController
     public function selection(                          AddressRepository $addressRepository,
                                                         PaymentMethodRepository $paymentMethodRepository,
                                                         EntityManagerInterface $entityManager,
-                                                        Request $request): Response
+                                                        Request $request,
+                                                        CartService $cartService
+    ): Response
     {
         $addresses = $this->getUser()->getAddresses();
         $paymentMethods = $this->getUser()->getPaymentMethods();
@@ -50,7 +53,6 @@ class OrderController extends AbstractController
 
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
             if ($formData['billing']=== null || $formData['delivery']===null || $formData['payment']===null )
@@ -59,23 +61,30 @@ class OrderController extends AbstractController
                     'controller_name' => 'OrderController',
                     'form' => $form->createView()
                 ]);
-
             }else{
-
                 $order = new Order();
                 $order->setCustomer($this->getUser());
                 $order->setBillingAddress($formData['billing']);
                 $order->setDeliveryAddress($formData['delivery']);
                 $order->setPaymentMethod($formData['payment']);
                 $order->setStatus(0);
+                $order->setTotal($cartService->getTotal());
                 $order->setDeliveryStatus(0);
 
                 $entityManager->persist($order);
+
+                foreach ($cartService->getCart() as $cartItem){
+                    $orderItem = new OrderItem();
+                    $orderItem->setProduct($cartItem["product"]);
+                    $orderItem->setQuantity($cartItem["quantity"]);
+                    $orderItem->setOfOrder($order);
+                    $entityManager->persist($orderItem);
+
+                }
+
                 $entityManager->flush();
                 return $this->redirectToRoute('app_recap_order', ['id' => $order->getId()]);
-
             }
-
         }
 
         return $this->render('order/selection.html.twig', [
@@ -87,14 +96,30 @@ class OrderController extends AbstractController
 
 
     #[Route('/recap/{id}', name: 'app_recap_order', methods: ['POST', 'GET'])]
-    public function recapOrder($id,OrderRepository $orderRepository, CartService $cartService): Response
+    public function recapOrder($id,OrderRepository $orderRepository): Response
     {
         return $this->render('order/recap.html.twig', [
             'order' => $orderRepository->find($id),
-            'total' =>$cartService->getTotal(),
-            'items' =>$cartService->getCart()
         ]);
     }
+
+    #[Route('/pay/{id}', name: 'app_pay', methods: ['GET'])]
+    public function payOrder(Order $order, EntityManagerInterface $entityManager, CartService $cartService):Response
+    {
+        if($order->getCustomer() ==! $this->getUser()){
+            return $this->redirectToRoute("app_product");
+        }
+
+        $order->setStatus(1);
+        $cartService->emptyCart();
+
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return $this->render('order/payed.html.twig', ['order'=>$order]);
+    }
+
+
 }
 
 

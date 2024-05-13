@@ -12,6 +12,14 @@
 
                     <a class="nav-link text-warning ms-3" href="{{ path('app_logout') }}">Logout</a>
 
+            {% elseif is_granted('ROLE_MANAGER')  %}
+
+                <a class="nav-link text-warning me-3" href="{{ path('app_manager') }}">Manager</a>
+
+                <a href="{{ path('app_profile') }}" class="nav-link text-warning">{{ app.user.email }}</a>
+
+                <a class="nav-link text-warning ms-3" href="{{ path('app_logout') }}">Logout</a>
+
 
 
             {% elseif is_granted('ROLE_USER')  %}

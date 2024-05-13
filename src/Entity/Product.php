@@ -44,10 +44,26 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
+    /**
+     * @var Collection<int, OrderItem>
+     */
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product')]
+    private Collection $orderItems;
+
+    /**
+     * @var Collection<int, Mark>
+     */
+    #[ORM\OneToMany(targetEntity: Mark::class, mappedBy: 'product')]
+    private Collection $marks;
+
+
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->orderItems = new ArrayCollection();
+        $this->marks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,4 +190,93 @@ class Product
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, OrderItem>
+     */
+    public function getOrderItems(): Collection
+    {
+        return $this->orderItems;
+    }
+
+    public function addOrderItem(OrderItem $orderItem): static
+    {
+        if (!$this->orderItems->contains($orderItem)) {
+            $this->orderItems->add($orderItem);
+            $orderItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderItem(OrderItem $orderItem): static
+    {
+        if ($this->orderItems->removeElement($orderItem)) {
+            // set the owning side to null (unless already changed)
+            if ($orderItem->getProduct() === $this) {
+                $orderItem->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mark>
+     */
+    public function getMarks(): Collection
+    {
+        return $this->marks;
+    }
+
+    public function addMark(Mark $mark): static
+    {
+        if (!$this->marks->contains($mark)) {
+            $this->marks->add($mark);
+            $mark->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMark(Mark $mark): static
+    {
+        if ($this->marks->removeElement($mark)) {
+            // set the owning side to null (unless already changed)
+            if ($mark->getProduct() === $this) {
+                $mark->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isMarkedBy(User $user):bool
+    {
+        foreach ($this->marks as $mark){
+            if($mark->getAuthor() === $user){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getAverage(): ?float
+    {
+        $totalMarks = $this->marks->count();
+        if ($totalMarks === 0) {
+            return null;
+        }
+
+        $total = 0;
+        foreach ($this->marks as $mark) {
+            $total += $mark->getNumber();
+        }
+
+        return $total / $totalMarks;
+    }
+
+
+
+
 }

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container d-flex flex-column  align-items-center">
+
+        {% if order.status == 1 %}
+
+            <h1 class="my-5 text-success">Payement réussi !</h1>
+
+        {% else %}
+            <h3 class="my-5 text-danger">Payement échoué :(</h3>
+
+        {% endif %}
+
+        <a href="{{ path('app_product') }}" class="btn btn-primary">Retourner vers le site</a>
+
+    </div>
+
+
+
+
+{% endblock %}

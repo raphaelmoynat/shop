@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    <div class="my-5">
+        <a class="btn btn-secondary" href="{{ path("app_manager") }}" >Retour</a>
+    </div>
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th scope="col">Commande</th>
+            <th scope="col">Client</th>
+            <th scope="col">Products</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Status Paiement</th>
+            <th scope="col">Status Delivery</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">{{ order.id }}</th>
+            <td>{{ order.customer.email }}</td>
+            <td>
+                {% for orderItem in order.orderItems %}
+                    <p>{{ orderItem.product.name }}</p>
+                {% endfor %}
+            </td>
+            <td>
+                {% for orderItem in order.orderItems %}
+                    <p>{{ orderItem.quantity }}</p>
+                {% endfor %}
+            </td>
+            {% if order.status == 1 %}
+                <td class="text-success">Paiement effectué</td>
+            {% else %}
+                <td class="text-danger">Paiement en attente</td>
+            {% endif%}
+            {% if order.deliveryStatus == 2 %}
+                <td class="text-success">Livré</td>
+            {% elseif order.deliveryStatus == 1 %}
+                <td class="text-warning">En cours de livraison</td>
+            {% elseif order.deliveryStatus == 0 %}
+                <td class="text-danger">A l'entrepôt</td>
+            {% endif%}
+
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex my-5 justify-content-center">
+        <a class="btn btn-danger" href="{{ path('app_manager_statusDelivery', {id:order.id}) }}">Change Delivery Status</a>
+    </div>
+
+
+
+
+
+
+{% endblock %}

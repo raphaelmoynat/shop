@@ -60,12 +60,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'author')]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, Mark>
+     */
+    #[ORM\OneToMany(targetEntity: Mark::class, mappedBy: 'author')]
+    private Collection $marks;
+
+
+
+
     public function __construct()
     {
         $this->paymentMethods = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->marks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -257,6 +267,64 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getAuthor() === $this) {
                 $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mark>
+     */
+    public function getMarks(): Collection
+    {
+        return $this->marks;
+    }
+
+    public function addMark(Mark $mark): static
+    {
+        if (!$this->marks->contains($mark)) {
+            $this->marks->add($mark);
+            $mark->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMark(Mark $mark): static
+    {
+        if ($this->marks->removeElement($mark)) {
+            // set the owning side to null (unless already changed)
+            if ($mark->getAuthor() === $this) {
+                $mark->setAuthor(null);
             }
         }
 
